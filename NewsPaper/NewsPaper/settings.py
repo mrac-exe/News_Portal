@@ -41,8 +41,15 @@ INSTALLED_APPS = [
     'news',
     'django_filters',
     'django.contrib.sites',
-    'django.contrib.flatpages',
+    'django.contrib.flatpages'
+
+    'sign',
+    'protect'
+    ,
 ]
+
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

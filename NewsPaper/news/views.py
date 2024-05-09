@@ -3,6 +3,9 @@ from django.views.generic import ListView, DetailView, CreateView,UpdateView, De
 from .models import Post
 from .filters import PostFilter
 from .forms import PostForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.shortcuts import render
 
 
 
@@ -56,10 +59,18 @@ class PostCreate(CreateView):
             post.type = 'AR'
         return super().form_valid(form)
 
-class PostUpdate(UpdateView):
+class PostUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    permission_required = ('portal.change_post',)
     form_class = PostForm
     model = Post
     template_name = 'news_edit.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        post = self.get_object()
+        context = {'post_id': post.pk}
+        if post.author.user != self.request.user:
+            return render(self.request, template_name='post_lock.html', context=context)
+        return super(PostUpdate, self).dispatch(request, *args, **kwargs)
 
 class PostDelete(DeleteView):
     model = Post
