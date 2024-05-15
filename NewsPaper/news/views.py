@@ -1,11 +1,13 @@
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView,UpdateView, DeleteView
-from .models import Post
+from .models import Post,Category,CategorySubs
 from .filters import PostFilter
 from .forms import PostForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 
 
 
@@ -76,3 +78,20 @@ class PostDelete(DeleteView):
     model = Post
     template_name = 'paper_delete.html'
     success_url = reverse_lazy('post_list')
+
+
+@login_required
+def subscribe(request, pk):
+    category = Category.objects.get(pk=pk)
+    user = request.user
+    category.subscribers.add(user)
+    return redirect(request.META.get('HTTP_REFERER'))
+
+
+
+@login_required
+def unsubscribe(request, pk):
+    category = Category.objects.get(pk=pk)
+    user = request.user
+    category.subscribers.add(user)
+    return redirect(request.META.get('HTTP_REFERER'))

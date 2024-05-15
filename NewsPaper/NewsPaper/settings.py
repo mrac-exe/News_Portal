@@ -95,6 +95,14 @@ TEMPLATES = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
 WSGI_APPLICATION = 'NewsPaper.wsgi.application'
 
 
@@ -152,3 +160,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SITE_ID = 1
 STATICFILES_DIRS = [BASE_DIR / 'static']
+
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'p0rtal.news'
+EMAIL_HOST_PASSWORD = '87052501040Aa'
+EMAIL_USE_SSL = True
+DEFAULT_FROM_EMAIL = 'p0rtal.news@yandex.ru'

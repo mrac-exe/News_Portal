@@ -27,7 +27,12 @@ class Author(models.Model):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=25, unique=True)
+    name = models.CharField(unique = True,max_length = 50)
+    subscribers = models.ManyToManyField(User, through = 'CategorySubs', related_name='subs')
+
+    def __str__(self):
+        return f'{self.name}'
+
 
 class Post(models.Model):
     articles = "AR"
@@ -70,6 +75,12 @@ class PostCategory(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
+
+class CategorySubs(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -84,3 +95,5 @@ class Comment(models.Model):
     def dislike(self):
         self.rating -= 1
         self.save()
+
+
